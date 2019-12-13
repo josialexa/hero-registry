@@ -1,0 +1,51 @@
+.hero-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 5px 0px 5px;
+    padding-left: 15%;
+    cursor: default;
+}
+
+.hero-item:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+.hero-image-container {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.hero-image {
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+}
+
+.hero-info-container {
+    width: 70%;
+}
+
+.hero-hero-class {
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.S {
+    color: rgb(0, 0, 255);
+}
+
+.A {
+    color: rgb(0, 255, 0);
+}
+
+.B {
+    color: rgb(255, 150, 40);
+}
+
+.C {
+    color: rgb(255, 0, 0);
+}

@@ -3,7 +3,13 @@ let curID = Math.max(...heroes.map(v => v.id)) + 1
 
 module.exports = {
     heroCreate: (req, res) => {
-        const {name, heroName, points, heroClass, position, picUrl} = req.body
+        const {name, heroName, heroClass, position, picUrl} = req.body
+
+        let points = 0;
+        if(heroClass == 'B') points = 1001
+        if(heroClass == 'A') points = 5001
+        if(heroClass == 'S') points = 15001
+
         let newHero = {
             id: curID,
             name,
@@ -21,7 +27,13 @@ module.exports = {
     },
 
     heroRead: (req, res) => {
-        res.status(200).json(heroes)
+        if(req.query.ids) {
+            const ids = req.query.ids.split(',').map(v => +v)
+            const temp = heroes.filter(v => ids.includes(v.id)).map(v => {return {id: v.id, name: v.name, heroName: v.heroName}})
+            res.status(200).json(temp)
+        } else {
+            res.status(200).json(heroes)
+        }
     },
 
     heroUpdate: (req, res) => {
@@ -29,7 +41,8 @@ module.exports = {
         if(index == -1) {
             res.status(500).json('Hero not found!')
         } else {
-            const {name, heroName, points, heroClass, position, picUrl} = req.body
+            const {name, heroName, heroClass, points, position, picUrl} = req.body
+
             let updatedHero = {
                 id: req.params.id,
                 name,

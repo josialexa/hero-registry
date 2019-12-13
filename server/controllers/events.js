@@ -1,9 +1,10 @@
 const fs = require('fs')
 let events = require('../../events.json')
 let curID = Math.max(...events.map(v => v.id)) + 1
-let heroes = require('../../heroes.json')
+let heroList = require('../../heroes.json')
 
 const calcPoints = (event) => {
+    let tempPoints = 0
     const level = {
         Tiger: 1,
         Demon: 2,
@@ -11,21 +12,26 @@ const calcPoints = (event) => {
         God: 4
     }
 
-    event.points = (100 ** level[event.evenClass]) + event.deaths + (event.injuries / 2)
+    tempPoints = (10 ** (level[event.eventClass] + 1)) + event.deaths + (event.injuries / 2)
+    event.points = tempPoints
     return event
 }
 
-const updateHeroPoints = (heroID, event, oldPoints = 0) => {
-    let index = heroes.findIndex(v => v.id == heroID)
+const updateHeroPoints = (heroID, event, oldList = [], oldPoints = 0) => {
+    let index = heroList.findIndex(v => v.id == heroID)
     let classPoints = {
         S: 1,
         A: 2,
         B: 3,
         C: 4
     }
+    if(oldList.includes(heroID)) heroList[index].points -= (oldPoints / (2**classPoints[heroList[index].heroClass]) * oldList.length)
+    let newPoints = event.points / ((2**classPoints[heroList[index].heroClass]) * event.heroes.length)
+    heroList[index].points += newPoints
 
-    let newPoints = event.points / ((2**classPoints[heroes[index].heroClass]) * event.heroes.length) - (oldPoints / (2**classPoints[heroes[index].heroClass]) * event.heroes.length)
-    heroes[index].points += newPoints
+    if(heroList[index].points > 1000) heroList[index].heroClass = 'B'
+    if(heroList[index].points > 5000) heroList[index].heroClass = 'A'
+    if(heroList[index].points > 15000) heroList[index].heroClass = 'S'
 }
 
 module.exports = {
@@ -51,7 +57,7 @@ module.exports = {
 
         res.status(200).json({
             events,
-            heroes
+            heroes: heroList
         })
     },
 
@@ -66,6 +72,7 @@ module.exports = {
             res.status(500).json('Event not found!')
         } else {
             const oldPoints = events[index].points
+            const oldList = events[index].heroes
     
             const {location, date, eventClass, deaths, injuries, heroes} = req.body
     
@@ -79,16 +86,16 @@ module.exports = {
                 heroes
             }
 
-            let newEvent = calcPoints(newEvent)
+            let newEvent = calcPoints(temp)
             events[index] = newEvent
 
             for(let i = 0; i < heroes.length; i++) {
-                updateHeroPoints(heroes[i], newEvent, oldPoints)
+                updateHeroPoints(heroes[i], newEvent, oldList, oldPoints)
             }
     
             res.status(200).json({
                 events,
-                heroes
+                heroes: heroList
             })
         }
     },

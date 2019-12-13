@@ -1,0 +1,27 @@
+#header {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    background-color: rgb(250, 250, 240);
+}
+
+#header-logo-container {
+    display: flex;
+    align-items: center;
+    padding: 0px 5% 0px;
+}
+
+#header-logo-image-container {
+    width: 10%;
+    height: 70%;
+    margin: 5%;
+}
+
+#header-logo-image {
+    width: 100%;
+    height: 100%;
+}
+
+#header-logo-text {
+    font-size: 2em;
+}
