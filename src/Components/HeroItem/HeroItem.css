@@ -9,7 +9,11 @@
 }
 
 .hero-item:hover {
-    background-color: rgb(220, 220, 220);
+    background-color: rgb(205, 205, 205);
+}
+
+.hero-item:active {
+    background-color: rgb(215, 215, 215)
 }
 
 .hero-image-container {

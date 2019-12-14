@@ -31,8 +31,13 @@ export default class HeroList extends Component {
         //open form
     }
 
+    openHero = () => {
+        //open hero detail
+    }
+
     render() {
         const counts = {
+            //maybe see if there's a way to move this to the back end
             S: this.state.heroes.filter(v => v.heroClass == 'S').length,
             A: this.state.heroes.filter(v => v.heroClass == 'A').length,
             B: this.state.heroes.filter(v => v.heroClass == 'B').length,

@@ -1,0 +1,41 @@
+.event-item {
+    width: 100%;
+    padding: 10px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+}
+
+.event-item:hover {
+    background-color: rgb(205, 205, 205);
+}
+
+.event-item:active {
+    background-color: rgb(215, 215, 215)
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.Tiger {
+    font-weight: bold;
+    color: rgb(0, 0, 255);
+}
+
+.Demon {
+    font-weight: bold;
+    color: rgb(0, 255, 0);
+}
+
+.Dragon {
+    font-weight: bold;
+    color: rgb(255, 150, 40);
+}
+
+.God {
+    font-weight: bold;
+    color: rgb(255, 0, 0);
+}

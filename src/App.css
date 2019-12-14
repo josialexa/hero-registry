@@ -11,3 +11,11 @@
     font-family: 'Dosis', sans-serif;
     background-color: rgb(80, 80, 100);
 }
+
+#lists-container {
+    height: 90%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
