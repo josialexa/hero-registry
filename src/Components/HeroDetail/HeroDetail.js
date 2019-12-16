@@ -20,21 +20,21 @@ export default class HeroDetail extends Component {
         }
     }
 
-    componentDidMount() {
-        axios.get(`/api/events?hero=${this.props.hero.id}`)
-            .then(res => {
-                let results = res.data
-                results.sort(eventSort)
-                this.setState({events: results})
-            })
-            .catch(err => console.log('Get hero events:', err))
-    }
+    // componentDidMount() {
+    //     axios.get(`/api/events?hero=${this.props.hero.id}`)
+    //         .then(res => {
+    //             let results = res.data
+    //             results.sort(eventSort)
+    //             this.setState({events: results})
+    //         })
+    //         .catch(err => console.log('Get hero events:', err))
+    // }
 
     updateEvents = (hero) => {
         axios.get(`/api/events?hero=${hero.id}`)
         .then(res => {
             let results = res.data
-            console.log(results)
+            // console.log(results)
             results.sort(eventSort)
             this.setState({events: results})
         })
@@ -43,7 +43,7 @@ export default class HeroDetail extends Component {
 
     componentDidUpdate(prevProps) {
         if(prevProps.hero != this.props.hero) {
-            console.log('hero changed!', this.props.hero)
+            // console.log('hero changed!', this.props.hero)
             this.updateEvents(this.props.hero)
         }
     }

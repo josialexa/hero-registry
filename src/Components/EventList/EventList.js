@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import EventItem from '../EventItem/EventItem'
+import EventDetail from '../EventDetail/EventDetail'
 import './EventList.css'
 
 const eventSort = (a, b) => {
@@ -15,7 +16,9 @@ export default class EventList extends Component {
         super()
 
         this.state = {
-            events: []
+            events: [],
+            showModal: false,
+            shownEvent: {}
         }
     }
 
@@ -37,6 +40,16 @@ export default class EventList extends Component {
     openEvent = (event) => {
         //open event detail
         console.log(event)
+        this.setState({
+            showModal: true,
+            shownEvent: event
+        })
+    }
+
+    closeEvent = () => {
+        this.setState({
+            showModal: false
+        })
     }
 
     render() {
@@ -51,6 +64,7 @@ export default class EventList extends Component {
                 <div id='event-controls'>
                     <button onClick={this.addEvent} id='event-control-button'>Add an event</button>
                 </div>
+                <EventDetail shown={this.state.showModal} close={this.closeEvent} event={this.state.shownEvent} />
             </section>
         )
     }

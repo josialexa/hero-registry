@@ -1,5 +1,8 @@
 let heroes = require('../../heroes.json')
 let curID = Math.max(...heroes.map(v => v.id)) + 1
+const heroSort = (a, b) => {
+    return b.points - a.points
+}
 
 module.exports = {
     heroCreate: (req, res) => {
@@ -27,10 +30,17 @@ module.exports = {
     },
 
     heroRead: (req, res) => {
+        heroes.sort(heroSort)
         if(req.query.ids) {
             const ids = req.query.ids.split(',').map(v => +v)
             const temp = heroes.filter(v => ids.includes(v.id)).map(v => {return {id: v.id, name: v.name, heroName: v.heroName}})
             res.status(200).json(temp)
+        } else if(req.query.startIndex && req.query.numToGet) {
+            // const index = heroes.findIndex(v => v.id == req.query.startID)
+            // console.log(index)
+            const next = heroes.slice(+req.query.startIndex, +req.query.numToGet + (+req.query.startIndex))
+
+            res.status(200).json(next)
         } else {
             res.status(200).json(heroes)
         }

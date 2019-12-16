@@ -22,19 +22,40 @@ export default class HeroList extends Component {
                 points: '',
                 id: 0
             },
-            showModal: false
+            showModal: false,
+            loadingIndex: 0
         }
     }
 
     componentDidMount() {
-        axios.get('/api/heroes')
+        axios.get(`/api/heroes?startIndex=${this.state.loadingIndex}&numToGet=20`)
             .then(res => {
                 let temp = res.data
                 temp.sort(heroSort)
 
-                this.setState({heroes: temp})
+                this.setState({
+                    heroes: temp,
+                    loadingIndex: 20
+                })
             })
             .catch(err => console.log('Get heroes:', err))
+        document.getElementById('hero-list').scrollTop = 0
+    }
+
+    trackScrolling = (e) => {
+        if(e.target.scrollTop >= e.target.scrollTopMax) {
+            axios.get(`/api/heroes?startIndex=${this.state.loadingIndex}&numToGet=20`)
+            .then(res => {
+                let temp = res.data
+                temp.sort(heroSort)
+
+                this.setState({
+                    heroes: [...this.state.heroes, ...temp],
+                    loadingIndex: this.state.loadingIndex + 20
+                })
+            })
+            .catch(err => console.log('Get heroes:', err))
+        }
     }
 
     addHero = () => {
@@ -76,7 +97,7 @@ export default class HeroList extends Component {
         return (
             <section id='hero-list-container'>
                 <header id='hero-list-header'>Heroes</header>
-                <div id='hero-list'>
+                <div id='hero-list' onScroll={e => this.trackScrolling(e)}>
                     {this.state.heroes.map((v, i) => <HeroItem key={v.id} hero={v} rank={i + 1 - adjusts[v.heroClass]} onClick={() => this.openHero(v, i + 1, adjusts)} />)}
                 </div>
                 <div id='hero-controls'>
