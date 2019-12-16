@@ -62,7 +62,14 @@ module.exports = {
     },
 
     eventRead: (req, res) => {
-        res.status(200).json(events)
+        if(req.query.hero) {
+            let filtered = events.filter(v => v.heroes.includes(+req.query.hero)).map(v => {
+                return {id: v.id, date: v.date, eventClass: v.eventClass}
+            })
+            res.status(200).json(filtered)
+        } else {
+            res.status(200).json(events)
+        }
     },
 
     eventUpdate: (req, res) => {

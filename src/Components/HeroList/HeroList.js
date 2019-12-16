@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
-import HeroItem from '../HeroItem/HeroItem'
 import axios from 'axios'
+import HeroItem from '../HeroItem/HeroItem'
+import HeroDetail from '../HeroDetail/HeroDetail'
 import './HeroList.css'
 
 const heroSort = (a, b) => {
@@ -12,7 +13,16 @@ export default class HeroList extends Component {
         super()
 
         this.state = {
-            heroes: []
+            heroes: [],
+            shownHero: {
+                picUrl: '',
+                name: '',
+                heroName: '',
+                heroClass: '',
+                points: '',
+                id: 0
+            },
+            showModal: false
         }
     }
 
@@ -31,8 +41,20 @@ export default class HeroList extends Component {
         //open form
     }
 
-    openHero = () => {
+    openHero = (hero, overallRank, adjusts) => {
         //open hero detail
+        console.log(hero, overallRank)
+        hero.rank = overallRank - adjusts[hero.heroClass]
+        this.setState({
+            shownHero: hero,
+            showModal: true
+        })
+    }
+
+    closeHero = () => {
+        this.setState({
+            showModal: false
+        })
     }
 
     render() {
@@ -44,15 +66,23 @@ export default class HeroList extends Component {
             C: this.state.heroes.filter(v => v.heroClass == 'C').length,
         }
 
+        const adjusts = {
+            S: 0,
+            A: counts.S,
+            B: counts.S + counts.A,
+            C: counts.S + counts.A + counts.B
+        }
+
         return (
             <section id='hero-list-container'>
                 <header id='hero-list-header'>Heroes</header>
                 <div id='hero-list'>
-                    {this.state.heroes.map((v, i) => <HeroItem key={v.id} hero={v} counts={counts} rank={i + 1} />)}
+                    {this.state.heroes.map((v, i) => <HeroItem key={v.id} hero={v} rank={i + 1 - adjusts[v.heroClass]} onClick={() => this.openHero(v, i + 1, adjusts)} />)}
                 </div>
                 <div id='hero-controls'>
                     <button onClick={this.addHero} className='hero-control-button'>Add a hero</button>
                 </div>
+                <HeroDetail hero={this.state.shownHero} hidden={this.state.showModal} closeHero={this.closeHero} />
             </section>
         )
     }

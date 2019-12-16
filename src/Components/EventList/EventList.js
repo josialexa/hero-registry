@@ -34,8 +34,9 @@ export default class EventList extends Component {
         //open form
     }
 
-    openEvent = () => {
+    openEvent = (event) => {
         //open event detail
+        console.log(event)
     }
 
     render() {
@@ -44,7 +45,7 @@ export default class EventList extends Component {
                 <header id='event-list-header'>Events</header>
                 <div id='event-list'>
                     {this.state.events.map((v, i) => {
-                        return <EventItem key={v.id} event={v} />
+                        return <EventItem key={v.id} event={v} onClick={() => this.openEvent(v)} />
                     })}
                 </div>
                 <div id='event-controls'>

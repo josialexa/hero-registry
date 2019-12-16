@@ -3,7 +3,7 @@ import './EventItem.css'
 
 export default function EventItem(props) {
     return (
-        <div className='event-item'>
+        <div className='event-item' onClick={props.onClick}>
             <div className='event-item-location-container'>
                 <span className='bold'>Location: </span><span className='event-item-location'>{props.event.location}</span>
             </div>
