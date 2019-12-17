@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import HeroItem from '../HeroItem/HeroItem'
 import HeroDetail from '../HeroDetail/HeroDetail'
+import HeroForm from '../HeroForm/HeroForm'
 import './HeroList.css'
 
 const heroSort = (a, b) => {
@@ -64,11 +65,12 @@ export default class HeroList extends Component {
 
     openHero = (hero, overallRank, adjusts) => {
         //open hero detail
-        console.log(hero, overallRank)
+        // console.log(hero, overallRank)
         hero.rank = overallRank - adjusts[hero.heroClass]
         this.setState({
             shownHero: hero,
-            showModal: true
+            showModal: true,
+            showForm: false
         })
     }
 
@@ -76,6 +78,52 @@ export default class HeroList extends Component {
         this.setState({
             showModal: false
         })
+    }
+
+    openForm = (hero = {}) => {
+        // console.log('called', hero)
+        this.setState({
+            shownHero: hero,
+            showForm: true,
+            showModal: false
+        })
+    }
+
+    closeForm = () => {
+        this.setState({
+            showForm: false
+        })
+    }
+
+    formAction = (hero, action) => {
+        if(!hero.id) {
+            axios.post('/api/heroes', hero)
+                .then(res => this.setState({
+                    heroes: res.data,
+                    showForm: false
+                }))
+                .catch(err => console.log('Post hero: ', err))
+        } else {
+            console.log('putting!')
+            axios.put(`/api/heroes/${hero.id}`, hero)
+                .then(res => {
+                    console.log(res.data)
+                    this.setState({
+                    heroes: res.data,
+                    showForm: false
+                })})
+                .catch(err => console.log('Put hero: ', err))
+        }
+    }
+
+    delete = (id) => {
+        axios.delete(`/api/heroes/${id}`)
+            .then(res => {
+                this.setState({
+                    heroes: res.data,
+                    showModal: false
+                })
+            })
     }
 
     render() {
@@ -101,9 +149,10 @@ export default class HeroList extends Component {
                     {this.state.heroes.map((v, i) => <HeroItem key={v.id} hero={v} rank={i + 1 - adjusts[v.heroClass]} onClick={() => this.openHero(v, i + 1, adjusts)} />)}
                 </div>
                 <div id='hero-controls'>
-                    <button onClick={this.addHero} className='hero-control-button'>Add a hero</button>
+                    <button onClick={this.openForm} className='hero-control-button'>Add a hero</button>
                 </div>
-                <HeroDetail hero={this.state.shownHero} hidden={this.state.showModal} closeHero={this.closeHero} />
+                <HeroDetail hero={this.state.shownHero} hidden={this.state.showModal} closeHero={this.closeHero} openForm={this.openForm} delete={this.delete} />
+                <HeroForm action={this.state.shownHero == {} ? 'post' : 'put'} hero={this.state.shownHero} shown={this.state.showForm} cancel={this.closeForm} submit={this.formAction} />
             </section>
         )
     }

@@ -50,14 +50,16 @@ module.exports = {
         let newEvent = calcPoints(temp)
         events.push(newEvent)
         curID++
-
-        for(let i = 0; i < heroes.length; i++) {
-            updateHeroPoints(heroes[i], newEvent)
+        
+        if(heroes){
+            for(let i = 0; i < heroes.length; i++) {
+                updateHeroPoints(heroes[i], newEvent)
+            }
         }
 
         res.status(200).json({
             events,
-            heroes: heroList
+            // heroes: heroList
         })
     },
 
@@ -102,7 +104,7 @@ module.exports = {
     
             res.status(200).json({
                 events,
-                heroes: heroList
+                // heroes: heroList
             })
         }
     },

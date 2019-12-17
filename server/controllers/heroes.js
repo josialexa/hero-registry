@@ -1,4 +1,4 @@
-let heroes = require('../../heroes.json')
+let heroes = require('../../tempHeroes.json')
 let curID = Math.max(...heroes.map(v => v.id)) + 1
 const heroSort = (a, b) => {
     return b.points - a.points
@@ -26,7 +26,7 @@ module.exports = {
         heroes.push(newHero)
         curID++
 
-        res.status(200).json(heroes)
+        res.status(200).json(heroes.slice(0, 20))
     },
 
     heroRead: (req, res) => {
@@ -47,6 +47,7 @@ module.exports = {
     },
 
     heroUpdate: (req, res) => {
+        console.log(req.params.id)
         const index = heroes.findIndex(v => v.id == req.params.id)
         if(index == -1) {
             res.status(500).json('Hero not found!')
@@ -54,10 +55,10 @@ module.exports = {
             const {name, heroName, heroClass, points, position, picUrl} = req.body
 
             let updatedHero = {
-                id: req.params.id,
+                id: +req.params.id,
                 name,
                 heroName,
-                points,
+                points: heroes[index].points,
                 heroClass,
                 position,
                 picUrl
@@ -65,7 +66,7 @@ module.exports = {
 
             // heroes.splice(index, 1, updatedHero)
             heroes[index] = updatedHero
-            res.status(200).json(heroes)
+            res.status(200).json(heroes.slice(0, 20))
         }
     },
 
@@ -77,7 +78,7 @@ module.exports = {
         } else {
             heroes.splice(index, 1)
 
-            res.status(200).json(heroes)
+            res.status(200).json(heroes.slice(0, 20))
         }
     }
 }

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import axios from 'axios'
 import EventItem from '../EventItem/EventItem'
 import EventDetail from '../EventDetail/EventDetail'
+import EventForm from '../EventForm/EventForm'
 import './EventList.css'
 
 const eventSort = (a, b) => {
@@ -18,6 +19,7 @@ export default class EventList extends Component {
         this.state = {
             events: [],
             showModal: false,
+            showForm: false,
             shownEvent: {}
         }
     }
@@ -50,6 +52,53 @@ export default class EventList extends Component {
         this.setState({
             showModal: false
         })
+    }    
+    
+    openForm = (event = {}) => {
+        // console.log('called', hero)
+        this.setState({
+            shownEvent: event,
+            showForm: true,
+            showModal: false
+        })
+    }
+
+    closeForm = () => {
+        this.setState({
+            showForm: false
+        })
+    }
+
+    formAction = (event, action) => {
+        console.log('event logging:', event)
+        if(!event.id) {
+            axios.post('/api/events', event)
+                .then(res => this.setState({
+                    events: res.data,
+                    showForm: false
+                }))
+                .catch(err => console.log('Post event: ', err))
+        } else {
+            console.log('putting!')
+            axios.put(`/api/events/${event.id}`, event)
+                .then(res => {
+                    console.log(res.data)
+                    this.setState({
+                    events: res.data,
+                    showForm: false
+                })})
+                .catch(err => console.log('Put hero: ', err))
+        }
+    }
+
+    delete = (id) => {
+        axios.delete(`/api/events/${id}`)
+            .then(res => {
+                this.setState({
+                    events: res.data,
+                    showModal: false
+                })
+            })
     }
 
     render() {
@@ -62,9 +111,10 @@ export default class EventList extends Component {
                     })}
                 </div>
                 <div id='event-controls'>
-                    <button onClick={this.addEvent} id='event-control-button'>Add an event</button>
+                    <button onClick={this.openForm} id='event-control-button'>Add an event</button>
                 </div>
                 <EventDetail shown={this.state.showModal} close={this.closeEvent} event={this.state.shownEvent} />
+                <EventForm action={this.shownEvent == {} ? 'post' : 'put'} event={this.state.shownEvent} shown={this.state.showForm} cancel={this.closeForm} submit={this.formAction} />
             </section>
         )
     }

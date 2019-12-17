@@ -48,6 +48,14 @@ export default class HeroDetail extends Component {
         }
     }
 
+    edit = () => {
+        this.props.openForm(this.props.hero)
+    }
+
+    delete = () => {
+        this.props.delete(this.props.hero.id)
+    }
+
     render() {
         return (
             <section className={`hero-detail-container ${this.props.hidden ? 'show' : 'hide'}`}>
@@ -74,6 +82,10 @@ export default class HeroDetail extends Component {
                             {/*events will go here in a map of event list components
                             preferably the same event list components used in the main view*/}
                             {this.state.events.map(v => <EventItem key={v.id} event={v} />)}
+                        </div>
+                        <div className='hero-detail-hero-controls'>
+                            <button onClick={this.edit}>Edit Hero</button>
+                            <button onClick={this.delete}>Delete Hero</button>
                         </div>
                     </div>
                 </div>

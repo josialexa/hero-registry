@@ -55,11 +55,15 @@
 
 .hero-detail-hero-photo-container {
     border: 1px solid black;
+    max-height: 250px;
+    height: 30%;
+    border-radius: 10px;
 }
 
 .hero-detail-hero-photo {
     height: 100%;
     width: 100%;
+    border-radius: inherit
 }
 
 .hero-detail-hero-info-events {

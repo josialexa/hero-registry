@@ -1,4 +1,4 @@
-.hero-form-container {
+.event-form-container {
     height: 100%;
     width: 100%;
     position: fixed;
@@ -6,10 +6,10 @@
     left: 0;
     background-color: rgba(0, 0, 0, .5);
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
-.hero-form {
+.event-form {
     background-color: white;
 }
